@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Details</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+         h1{
+            text-align: center;
+            margin: 2rem;
+        }
+        table{
+            border: 1px solid;
+            display: flex;
+            justify-content: center;
+            height: auto;
+            width: 80%;
+            margin-left: 9rem;
+        }
+        td,th{
+            border: 1px solid;
+            width: 25rem;
+            height: 3.35rem;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+  table {
+    margin-left: 3rem;
+  }
+}
+In this ex
+    </style>
+</head>
+<body>
+        <h1>Customer Details</h1>
+        <table>
+            <tr>
+                <th style="background-color: aqua;">Item/Customer</th>
+                <th style="background-color: rgb(129, 182, 220);">Customer1</th>
+                <th style="background-color: rgb(129, 182, 220);">Customer2</th>
+                <th style="background-color: rgb(129, 182, 220);">Total</th>
+            </tr>
+            <tr>
+                <td style="background-color: rgb(232, 232, 103);font-weight: bolder;">Quantity</td>
+                <td style="background-color: rgb(214, 196, 212);" id="C1Quantity">0</td>
+                <td style="background-color: rgb(214, 196, 212);" id="C2Quantity">0</td>
+                <td style="background-color: rgb(214, 196, 212);" id="Qtotal">0</td>
+            </tr>
+            <tr>
+                <td style="background-color: rgb(232, 232, 103);font-weight: bolder;">Weight</td>
+                <td style="background-color: aqua;" id="C1Weight">0</td>
+                <td style="background-color: aqua;" id="C2Weight">0</td>
+                <td style="background-color: aqua;" id="Wtotal">0</td>
+            </tr>
+            <tr>
+                <td style="background-color: rgb(232, 232, 103);font-weight: bolder;">Box Count</td>
+                <td style="background-color: rgb(214, 196, 212);" id="C1BoxCount">0</td>
+                <td style="background-color: rgb(214, 196, 212);" id="C2BoxCount">0</td>
+                <td style="background-color: rgb(214, 196, 212);" id="Btotal">0</td>
+            </tr>
+        </table>
+
+        <script>
+            async function getTableData(){
+                let response= await fetch('https://juhosibackend.onrender.com/api/v1/adminDetails');
+                let data= await response.json();
+                let C1Weight=0;
+                let C2Weight=0
+                let totalWeight=0;
+                let C1Quantity=0;
+                let C2Quantity=0;
+                let totalQuantity=0;
+                let C1BoxCount=0;
+                let C2BoxCount=0;
+                let totalBoxCount=0;
+                for(i=0;i<data.users.length;i++)
+                {
+                    if(data.users[i].ID===1234568)
+                    {
+                        C1Weight=C1Weight+data.users[i].Weight;
+                        C1Quantity=C1Quantity+data.users[i].Quantity;
+                        C1BoxCount=C1BoxCount+data.users[i].BoxCount;
+                    }
+                    else if(data.users[i].ID===1234569)
+                    {
+                        C2Weight=C2Weight+data.users[i].Weight;
+                        C2Quantity=C2Quantity+data.users[i].Quantity;
+                        C2BoxCount=C2BoxCount+data.users[i].BoxCount;
+                    }
+                }
+                totalWeight=C1Weight+C2Weight;
+                totalQuantity=C1Quantity+C2Quantity;
+                totalBoxCount=C1BoxCount+C2BoxCount;
+                document.getElementById("C1Quantity").textContent=C1Quantity;
+                document.getElementById("C2Quantity").textContent=C2Quantity;
+                document.getElementById("Qtotal").textContent=totalQuantity;
+                document.getElementById("C1Weight").textContent=C1Weight;
+                document.getElementById("C2Weight").textContent=C2Weight;
+                document.getElementById("Wtotal").textContent=totalWeight;
+                document.getElementById("C1BoxCount").textContent=C1BoxCount;
+                document.getElementById("C2BoxCount").textContent=C2BoxCount;
+                document.getElementById("Btotal").textContent=totalBoxCount;
+            }
+           window.onload=getTableData();
+        </script>
+</body>
+</html>

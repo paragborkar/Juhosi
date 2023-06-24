@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details Page</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        h1{
+            text-align: center;
+            margin: 2rem;
+        }
+        form{
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        input{
+            margin: 1rem;
+        }
+        button{
+            width: 12rem;
+            height: 2rem;
+            background-color: rgb(47, 101, 188);
+        }
+
+        span{
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Details Form</h1>
+    <form id="form">
+        <label>Order Date</label><input type="date" name="orderDate" id="Date"/><br>
+        <label>Company</label><input type="text" name="company" id="Company"/>
+        <br>
+        <span id="Scompany">Please Enter Only Alphanumeric Value</span><br>
+        <label>Owner</label><input type="text" name="owner" id="Owner"/><br>
+        <span id="Sowner">Please Enter Only Alphanumeric Value</span><br>
+        <label>item</label><input type="text" name="item"/><br>
+        <label>Quantity</label><input type="text" name="quantity"/><br>
+        <label>Weight</label><input type="text" name="weight" id="Weight"/><br>
+        <span id="Sweight">Please Enter Only Float Value</span><br>
+        <label>Request for Shipment</label><input type="text" name="reqForShipment"/><br>
+        <label>Tracking ID</label><input type="text" name="trackingId"/><br>
+        <label>Shipment Size</label><input type="text" name="shipmentSize" id="ShipmentSize"/><br>
+        <span   id="Sshipmentsize">Please Enter Value Only In L*B*H Format</span><br>
+        <label>Box Count</label><input type="number" name="boxCount"/><br>
+        <label>Specification</label><input type="text" name="specification"/><br>
+        <label>Checklist Quantity</label><input type="text" name="checklistQuantity"/><br>
+        <button type="submit">SUBMIT</button>
+    </form>
+
+    <script>
+        const formELement=document.getElementById("form");
+        formELement.addEventListener('submit',e=>{
+            e.preventDefault();
+            let Date=document.getElementById("Date").value;
+            if(Date==="")
+            {
+                alert("Please Enter Date");
+            }
+            let company=document.getElementById("Company").value;
+            let owner=document.getElementById("Owner").value;
+            let weight=document.getElementById("Weight").value;
+            let shipmentSize=document.getElementById("ShipmentSize").value;
+            let Scompany=document.getElementById("Scompany");
+            let Sowner=document.getElementById("Sowner");
+            let Sweight=document.getElementById("Sweight");
+            let Sshipmentsize=document.getElementById("Sshipmentsize");
+            const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+            const floatRegex = /^[-+]?[0-9]*\.?[0-9]+$/;
+            const dimensionRegex = /^\d+(\.\d+)?\*\d+(\.\d+)?\*\d+(\.\d+)?$/;
+            console.log(alphanumericRegex.test(company));
+            console.log(floatRegex.test(weight));
+            console.log(dimensionRegex.test(shipmentSize));
+
+            if(!alphanumericRegex.test(company))
+            {
+                Scompany.style.display="block";
+                console.log('Hello1');
+                return;
+            }
+            else{
+                Scompany.style.display="none";
+            }
+            if(!alphanumericRegex.test(owner))
+            {
+                Sowner.style.display="block";
+                console.log('Hello2');
+                return;
+            }
+            else{
+                Sowner.style.display="none";
+            }
+            if(!floatRegex.test(weight))
+            {
+                Sweight.style.display="block";
+                console.log('Hello3');
+                return;
+            }
+            else{
+                Sweight.style.display="none";
+            }
+            if(!dimensionRegex.test(shipmentSize))
+            {
+                Sshipmentsize.style.display="block";
+                console.log('Hello4');
+                return;
+            }
+            else{
+                Sshipmentsize.style.display="none";
+            }
+            const formData=new FormData(formELement);
+            let data=Object.fromEntries(formData);
+            let id={id:localStorage.getItem("ID")};
+            data={...id,...data};
+            console.log(data);
+            fetch("https://juhosibackend.onrender.com/api/v1/details",{
+                method:'POST',
+                headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+                body:JSON.stringify(data)
+            }).then(res=>res.json()).then(data=>{alert("Data Saved Successfully");window.location.href = "index.html";}).catch(err=>console.log(err));
+        });
+    </script>
+</body>
+</html>
